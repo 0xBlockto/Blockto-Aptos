@@ -49,7 +49,7 @@ const SignupPage: FC = () => {
         name: name,
         username: username,
         pfp: uploadedFiles[0].cid,
-        statement: 'Sign up to luxora',
+        statement: 'Sign up to SoulBase',
         uri: window.location.origin,
         version: '1',
         chainId: chain?.id,
@@ -94,7 +94,7 @@ const SignupPage: FC = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
-            to luxora
+            to SoulBase
           </CardDescription>
         </CardHeader>
         <CardContent> 
