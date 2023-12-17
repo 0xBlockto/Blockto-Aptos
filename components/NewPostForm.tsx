@@ -65,21 +65,13 @@ const NewPostForm: React.FC<Props> = ({
     setUploadError('');
   
     try {
-      // const imagesResponse = await fetch('/api/images/f');
-      // let beforeImages = [];
-      // if (imagesResponse.ok) {
-      //   const imagesData = await imagesResponse.json();
-      //   console.log("IMAGES DATA: ", imagesData)
-      //   beforeImages = imagesData.map(image => "https://gateway.lighthouse.storage/ipfs/" + image);
-      // }
-      // console.log("BEFORE IMAGES: ", beforeImages);
       const currentImage = uploadedFiles[0] ? "https://gateway.lighthouse.storage/ipfs/" + uploadedFiles[0].cid : null;
   
       if (!currentImage) {
         throw new Error("No image to upload");
       }
   
-      const AIRequest = await fetch('http://localhost:3001', {
+      const AIRequest = await fetch('https://ai.luxora.space', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
