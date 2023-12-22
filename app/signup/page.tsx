@@ -4,8 +4,6 @@ import { useState, useEffect, FC } from 'react';
 import { getCsrfToken, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Upload from '@/components/Upload';
-import { useAccount, useNetwork, useSignMessage } from 'wagmi';
-import { ExtendedSiweMessage } from '@/utils/ExtendedSiweMessage';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -24,6 +22,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+
 type UploadedFile = {
   cid: string;
   name: string;
@@ -36,33 +36,51 @@ const SignupPage: FC = () => {
   const [username, setUsername] = useState<string>('');
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [uploadError, setUploadError] = useState('');
-  const { signMessageAsync } = useSignMessage();
-  const { chain } = useNetwork();
-  const { address, isConnected } = useAccount();
+
+  const {
+    connect,
+    account,
+    network,
+    connected,
+    disconnect,
+    wallet,
+    wallets,
+    signAndSubmitTransaction,
+    signTransaction,
+    signMessage,
+    signMessageAndVerify,
+  } = useWallet();
 
   const handleSignUp = async () => {
     try {
-      const callbackUrl = '/';
-      const message = new ExtendedSiweMessage({
-        domain: window.location.host,
-        address: address,
+      if (!account?.address) {
+        console.log('Ethereum account is not available.');
+        return;
+      }
+
+      const message = {
+        statement: 'SignUp to Blockto using Petra Wallet',
+        address: account.address,
         name: name,
         username: username,
-        pfp: uploadedFiles[0].cid,
-        statement: 'Sign up to SoulBase',
-        uri: window.location.origin,
-        version: '1',
-        chainId: chain?.id,
-        nonce: await getCsrfToken(),
-      });
-      const signature = await signMessageAsync({
-        message: message.prepareMessage(),
-      });
+        pfp: uploadedFiles[0].cid
+      }
+
+      const payload = {
+        message: JSON.stringify(message),
+        nonce: await getCsrfToken() as string
+      };
+
+      const signResponse = await signMessageAndVerify(payload);
+      if (!signResponse) {
+        console.log('Signature verification failed!');
+        return;
+      }
+
       signIn('credentials', {
         message: JSON.stringify(message),
         redirect: false,
-        signature,
-        callbackUrl,
+        callbackUrl: '/'
       });
       router.push('/');
     } catch (error) {
@@ -94,7 +112,7 @@ const SignupPage: FC = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
-            to SoulBase
+            to Blockto
           </CardDescription>
         </CardHeader>
         <CardContent> 

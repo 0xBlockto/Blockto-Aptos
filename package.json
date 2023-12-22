@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aptos-labs/wallet-adapter-ant-design": "^2.0.0",
+    "@aptos-labs/wallet-adapter-react": "^2.1.4",
     "@heroicons/react": "^2.0.18",
     "@lighthouse-web3/sdk": "^0.3.0",
     "@pinata/sdk": "^2.1.0",
@@ -33,6 +35,7 @@
     "next": "13.4.17",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
+    "petra-plugin-wallet-adapter": "^0.3.0",
     "postcss": "8.4.28",
     "react": "18.2.0",
     "react-dom": "18.2.0",

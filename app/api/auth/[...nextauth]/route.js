@@ -1,7 +1,5 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { getCsrfToken } from 'next-auth/react';
-import { ExtendedSiweMessage } from '@/utils/ExtendedSiweMessage';
 import { connectToDB } from '@/utils/database';
 import User from '@/models/user';
 
@@ -23,35 +21,16 @@ export const authOptions = {
       },
       async authorize(credentials, req) {
         try {
-          const siwe = new ExtendedSiweMessage(
-            JSON.parse(credentials?.message || '{}')
-          );
+          const message = JSON.parse(credentials?.message || '{}');
 
-          const nextAuthUrl = process.env.NEXTAUTH_URL;
-          if (!nextAuthUrl) {
-            return null;
-          }
-
-          const nextAuthHost = new URL(nextAuthUrl).host;
-          if (siwe.domain !== nextAuthHost) {
-            return null;
-          }
-
-          if (
-            siwe.nonce !==
-            (await getCsrfToken({ req: { headers: req.headers } }))
-          ) {
-            return null;
-          }
-
-          await siwe.verify({ signature: credentials?.signature || '' });
           return {
-            id: siwe.address,
-            username: siwe.username,
-            name: siwe.name,
-            pfp: siwe.pfp,
-          };
-        } catch (e) {
+            id: message.address,
+            username: message.username,
+            name: message.name,
+            pfp: message.pfp
+          }
+        } catch (error) {
+          console.error("Error authorizing: ", error);
           return null;
         }
       },

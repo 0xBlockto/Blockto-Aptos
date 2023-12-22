@@ -43,7 +43,8 @@ export default function Home() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('/api/users/all/f');
+        // const response = await fetch('/api/users/all/f');
+        const response = await fetch('http://localhost:3001/api/users/all');
         const data = await response.json();
         console.log("Creators: ", data)
         setUsers(data);
@@ -60,14 +61,16 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/api/post/all/f');
+        // const response = await fetch('/api/post/all/f');
+        const response = await fetch('http://localhost:3001/api/posts/all');
         const data = await response.json();
         console.log("Posts: ", data);
 
         const sortedPosts = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
         const postDataWithImages = await Promise.all(sortedPosts.map(async post => {
-          const imageResponse = await fetch(`/api/post/${post.cid}`);
+          // const imageResponse = await fetch(`/api/post/${post.cid}`);
+          const imageResponse = await fetch(`http://localhost:3001/api/post/${post.cid}`);
           const imageData = await imageResponse.json();
           console.log("Image: ", imageData);
           return {
@@ -222,27 +225,6 @@ export default function Home() {
               </div>
             )
           }
-          {/* {
-            view === 'profile' && currentUser && (
-              <div className="w-full">
-                <div className="relative">
-                  <div className="bg-gradient-to-r from-gray-700 to-purple-1000 h-40"></div>
-                  <div className="absolute top-1/2 left-12 transform -translate-y-1/2">
-                    <Avatar className="rounded-xl overflow-hidden w-40 h-40 border-2 border-white">
-                      <AvatarImage
-                        src={`https://gateway.lighthouse.storage/ipfs/${currentUser.profilePicture}`}
-                        // className="w-24 h-24 object-cover"
-                      />
-                    </Avatar>
-                  </div>
-                  <div className="mt-20 ml-12">
-                    <h2 className="text-2xl font-bold">{currentUser.name}</h2>
-                    <p className="text-md text-gray-400">@{currentUser.username}</p>
-                  </div>
-                </div>
-              </div>
-            )
-          } */}
           {
             view === 'profile' && currentUser && (
               <div className="w-full">
@@ -262,7 +244,7 @@ export default function Home() {
                     <p className="text-md text-zinc-400">@{currentUser.username}</p>
                   </div>
 
-                  <div className="border-t border-neutral-800 mt-28"></div> {/* Adjust styles as needed */}
+                  <div className="border-t border-neutral-800 mt-28"></div>
 
                   <div className='flex flex-1 flex-wrap flex-col'>
                     {userPosts.map(post => (

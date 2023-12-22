@@ -66,6 +66,7 @@ const NewPostForm: React.FC<Props> = ({
   
     try {
       const currentImage = uploadedFiles[0] ? "https://gateway.lighthouse.storage/ipfs/" + uploadedFiles[0].cid : null;
+      console.log("Current Image: ", currentImage)
   
       if (!currentImage) {
         throw new Error("No image to upload");
@@ -102,12 +103,14 @@ const NewPostForm: React.FC<Props> = ({
       }
   
       const postData = {
+        id: (session as any)?.user?.id,
         content: postText,
         files: uploadedFiles,
         ...(replyingTo && { replyingTo }),
       };
   
-      const postRequest = await fetch('/api/post/new', {
+      // const postRequest = await fetch('/api/post/new', {
+      const postRequest = await fetch('http://localhost:3001/api/post/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +129,8 @@ const NewPostForm: React.FC<Props> = ({
         console.log('Successfully posted:', postResponse.postCreationData.cid);
         console.log('Now gonna mint NFT');
   
-        const mintRequest = await fetch('/api/nft/mint', {
+        // const mintRequest = await fetch('/api/nft/mint', {
+        const mintRequest = await fetch('http://localhost:3001/api/nft/mint', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -134,23 +138,25 @@ const NewPostForm: React.FC<Props> = ({
           body: JSON.stringify({
             image_cid: postData.files[0].cid,
             nft_name: nftName,
-            nft_description: postText
+            nft_description: postText,
+            address: (session?.user as any)?.address
           }),
         });
-  
+
         const mintResponse = await mintRequest.json();
         console.log("MINT DATA: ", mintResponse);
   
         if ((mintResponse as any).success) {
           
-          const transactionUpdateRequest = await fetch('/api/post/update/transactionurl', {
+          // const transactionUpdateRequest = await fetch('/api/post/update/transactionurl', {
+          const transactionUpdateRequest = await fetch('http://localhost:3001/api/post/update/transactionurl', {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               cid: postResponse.postCreationData.cid,
-              hash: mintResponse.receipt.hash
+              nft: mintResponse.nft
             }),
           });
         

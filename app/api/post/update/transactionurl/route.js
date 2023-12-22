@@ -1,15 +1,13 @@
 import { connectToDB } from '@/utils/database';
 import Post from '@/models/post';
 
-const blockchainUrl = "https://testnet-zkevm.polygonscan.com/tx/";
-
 export const PATCH = async (req) => {
   try {
     await connectToDB();
 
-    const { cid, hash } = await req.json();
+    const { cid, nft } = await req.json();
 
-    const transactionUrl = blockchainUrl + hash;
+    const transactionUrl = `https://explorer.aptoslabs.com/txn/${nft}/payload?network=testnet`;
 
     const post = await Post.findOne({ cid: cid });
     if (!post) {
