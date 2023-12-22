@@ -110,7 +110,7 @@ const NewPostForm: React.FC<Props> = ({
       };
   
       // const postRequest = await fetch('/api/post/new', {
-      const postRequest = await fetch('http://localhost:3001/api/post/new', {
+      const postRequest = await fetch('https://api.blockto.social/api/post/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const NewPostForm: React.FC<Props> = ({
         console.log('Now gonna mint NFT');
   
         // const mintRequest = await fetch('/api/nft/mint', {
-        const mintRequest = await fetch('http://localhost:3001/api/nft/mint', {
+        const mintRequest = await fetch('https://api.blockto.social/api/nft/mint', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ const NewPostForm: React.FC<Props> = ({
         if ((mintResponse as any).success) {
           
           // const transactionUpdateRequest = await fetch('/api/post/update/transactionurl', {
-          const transactionUpdateRequest = await fetch('http://localhost:3001/api/post/update/transactionurl', {
+          const transactionUpdateRequest = await fetch('https://api.blockto.social/api/post/update/transactionurl', {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',

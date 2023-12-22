@@ -67,7 +67,7 @@ function Nav() {
       }
 
       // const userResponse = await fetch(`/api/user/${account.address}`);
-      const userResponse = await fetch(`http://localhost:3001/api/user/${account.address}`);
+      const userResponse = await fetch(`https://api.blockto.social/api/user/${account.address}`);
       if (userResponse.status === 404) {
         router.push('/signup');
         return;
