@@ -43,8 +43,8 @@ export default function Home() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        // const response = await fetch('/api/users/all/f');
-        const response = await fetch('https://api.blockto.social/api/users/all');
+        const response = await fetch('/api/users/all/f');
+        // const response = await fetch('https://api.blockto.social/api/users/all');
         const data = await response.json();
         console.log("Creators: ", data)
         setUsers(data);
@@ -61,16 +61,16 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // const response = await fetch('/api/post/all/f');
-        const response = await fetch('https://api.blockto.social/api/posts/all');
+        const response = await fetch('/api/post/all/f');
+        // const response = await fetch('https://api.blockto.social/api/posts/all');
         const data = await response.json();
         console.log("Posts: ", data);
 
         const sortedPosts = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
         const postDataWithImages = await Promise.all(sortedPosts.map(async post => {
-          // const imageResponse = await fetch(`/api/post/${post.cid}`);
-          const imageResponse = await fetch(`https://api.blockto.social/api/post/${post.cid}`);
+          const imageResponse = await fetch(`/api/post/${post.cid}`);
+          // const imageResponse = await fetch(`https://api.blockto.social/api/post/${post.cid}`);
           const imageData = await imageResponse.json();
           console.log("Image: ", imageData);
           return {

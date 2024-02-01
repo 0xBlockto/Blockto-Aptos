@@ -40,8 +40,8 @@ const Upload = (props: Props) => {
       console.log("FILE RECEIVED: ", files[0])
 
       try {
-        // const response = await fetch('/api/post/upload', {
-        const response = await fetch('https://api.blockto.social/api/post/upload', {
+        const response = await fetch('/api/post/upload', {
+        // const response = await fetch('https://api.blockto.social/api/post/upload', {
           method: 'POST',
           body: formData,
         });
